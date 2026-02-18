@@ -1,0 +1,52 @@
+{
+    "P001": {
+        "name": "Rahul Sharma",
+        "city": "Pune",
+        "age": 32,
+        "gender": "Male",
+        "height": 1.75,
+        "weight": 78,
+        "bmi": 25.47,
+        "verdict": "Overweight"
+    },
+    "P002": {
+        "name": "Sneha Patil",
+        "city": "Mumbai",
+        "age": 28,
+        "gender": "Female",
+        "height": 1.62,
+        "weight": 55,
+        "bmi": 20.96,
+        "verdict": "Normal"
+    },
+    "P003": {
+        "name": "Amit Verma",
+        "city": "Nagpur",
+        "age": 40,
+        "gender": "Male",
+        "height": 1.70,
+        "weight": 92,
+        "bmi": 31.83,
+        "verdict": "Obese"
+    },
+    "P004": {
+        "name": "Priya Desai",
+        "city": "Nashik",
+        "age": 35,
+        "gender": "Female",
+        "height": 1.58,
+        "weight": 45,
+        "bmi": 18.03,
+        "verdict": "Underweight"
+    },
+    "P005": {
+        "name": "Karan Joshi",
+        "city": "Kolhapur",
+        "age": 29,
+        "gender": "Male",
+        "height": 1.80,
+        "weight": 85,
+        "bmi": 26.23,
+        "verdict": "Overweight"
+    }
+}
