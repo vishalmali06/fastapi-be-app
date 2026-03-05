@@ -82,7 +82,10 @@ def sort_patients(sort_by: str = Query(...,
     valid_fields = ['height', 'weight', 'bmi']
     
     if sort_by not in valid_fields:
-        raise HTTPException(status_code=400, detail='Invalid field select from {valid_fields}')
+        raise HTTPException(
+            status_code=400,
+            detail=f'Invalid field select from {valid_fields}'
+        )
 
     if order not in ['asc', 'desc']:
         raise HTTPException(status_code=400, detail='Invalid order selet between asc and desc')
@@ -103,7 +106,7 @@ def create_patient(patient : Patient):
     
     # check the patient aleady exist 
     if patient.id in data:
-        raise HTTPException(status_code=400, detail='Patient already exist')
+        raise HTTPException(status_code=409, detail='Patient already exists')
     
     # new patient add to the database 
     data[patient.id] = patient.model_dump(exclude=['id'])
@@ -113,30 +116,46 @@ def create_patient(patient : Patient):
     
     return JSONResponse(status_code=201, content={'message': 'patient created successfully'})
     
-@app.put('/edit/{patinet_id}')
-def update_patinet(patinet_id: str, patinet_update : PatientUpdate):
+@app.put('/edit/{patient_id}')
+def update_patient(patient_id: str, patient_update : PatientUpdate):
     
     # load existing data
     data = load_data()
     
     # check the patient aleady exist 
-    if patinet_id not in data:
-        raise HTTPException(status_code=400, detail='Patient not found')
+    if patient_id not in data:
+        raise HTTPException(status_code=404, detail='Patient not found')
     
-    existing_patinet_info = data[patinet_id]
+    existing_patient_info = data[patient_id]
     
-    updated_patinet_info = patinet_update.model_dump(exclude_unset=True)
+    updated_patient_info = patient_update.model_dump(exclude_unset=True)
     
-    for key, value in updated_patinet_info.items():
-        existing_patinet_info[key] = value
+    for key, value in updated_patient_info.items():
+        existing_patient_info[key] = value
 
-    existing_patinet_info['id'] = patinet_id
-    patient_pydantic_obj = Patient(**existing_patinet_info)
-    existing_patinet_info = patient_pydantic_obj.model_dump(exclude='id')
+    existing_patient_info['id'] = patient_id
+    patient_pydantic_obj = Patient(**existing_patient_info)
+    existing_patient_info = patient_pydantic_obj.model_dump(exclude='id')
     
-    data[patinet_id] = existing_patinet_info
+    data[patient_id] = existing_patient_info
     
      # save into the json file
     save_data(data)
     
     return JSONResponse(status_code=200, content={'message': 'patient updated successfully'})
+
+
+@app.delete('/delete/{patient_id}')
+def delete_patient(patient_id : str):
+    
+    # load data
+    data = load_data()
+    
+    if patient_id not in data:
+        raise HTTPException(status_code=404, detail='Patient not found')
+    
+    del data[patient_id]
+    
+    save_data(data)
+    
+    return JSONResponse(status_code=200, content={'message': 'patient deleted successfully'})
